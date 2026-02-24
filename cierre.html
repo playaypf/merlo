@@ -2,21 +2,32 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Planilla YPF - Automatizada</title>
+    <title>Planilla YPF - Web</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #444; margin: 20px; display: flex; justify-content: center; }
-        .hoja { width: 1050px; background: white; padding: 20px; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        body { font-family: Arial, sans-serif; background-color: #444; margin: 20px; display: flex; flex-direction: column; align-items: center; }
+        .hoja { width: 1050px; background: white; padding: 20px; box-shadow: 0 0 15px rgba(0,0,0,0.5); margin-bottom: 20px;}
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         td { border: 1px solid #000; height: 26px; font-size: 11px; vertical-align: middle; padding: 0; }
         .flex-row { display: flex; align-items: center; width: 100%; height: 100%; }
         .label-text { padding: 0 5px; font-weight: bold; white-space: nowrap; font-size: 10px; }
-        .currency { padding-left: 5px; font-weight: bold; color: #555; }
-        input, select, textarea { border: none; outline: none; font-size: 11px; width: 100%; height: 100%; background: transparent; padding: 0 5px; box-sizing: border-box; }
+        .currency { padding-left: 5px; font-weight: bold; color: #555; transition: color 0.3s;}
+        
+        input, select, textarea { border: none; outline: none; font-size: 11px; width: 100%; height: 100%; background: transparent; padding: 0 5px; box-sizing: border-box; font-family: inherit;}
+        input:focus { background-color: #e8f4fd; }
+        
         .header-bg { background-color: #f2f2f2; text-align: center; font-weight: bold; text-transform: uppercase; }
         .readonly-calc { background-color: #fdfdfd; font-weight: bold; color: #000; }
         .sub-header { text-align: center; font-weight: bold; font-size: 9px; background: #fafafa; }
-        /* Columnas */
+        
         .c-nombre { width: 16.5%; } .c-importe { width: 8.5%; } .c-rend-label { width: 15%; } .c-rend-monto { width: 10%; }
+        #obs { resize: none; min-height: 45px; line-height: 1.4; padding-top: 5px;}
+
+        /* Controles de guardado */
+        .panel-control { width: 1050px; display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 15px 20px; box-sizing: border-box; box-shadow: 0 0 15px rgba(0,0,0,0.5); border-radius: 5px; }
+        .btn { padding: 10px 20px; font-weight: bold; cursor: pointer; border: none; border-radius: 4px; color: white; font-size: 14px;}
+        .btn-guardar { background-color: #1976d2; } .btn-guardar:hover { background-color: #115293; }
+        .btn-cargar { background-color: #2e7d32; } .btn-cargar:hover { background-color: #1b5e20; }
+        #status-msg { font-size: 14px; font-weight: bold; color: #555; }
     </style>
 </head>
 <body>
@@ -32,17 +43,15 @@
 
         <tr>
             <td colspan="6" class="header-bg" style="font-size: 14px;">PLANILLA DE CONTROL DE TURNO PLAYA YPF</td>
-            <td colspan="2">
-                <div class="flex-row"><span class="label-text">PLANILLA N°</span><input type="text"></div>
-            </td>
+            <td colspan="2"><div class="flex-row"><span class="label-text">PLANILLA N°</span><input type="text"></div></td>
         </tr>
         <tr>
             <td colspan="2"><div class="flex-row"><span class="label-text">Resp. Playa:</span><input type="text"></div></td>
             <td colspan="2"><div class="flex-row"><span class="label-text">Operarios:</span><input type="text"></div></td>
-            <td colspan="2"><div class="flex-row"><span class="label-text">Fecha:</span><input type="date"></div></td>
+            <td colspan="2"><div class="flex-row"><span class="label-text">Fecha:</span><input type="date" id="input-fecha"></div></td>
             <td colspan="2">
                 <div class="flex-row"><span class="label-text">TURNO:</span>
-                    <select><option></option><option>MAÑANA</option><option>TARDE</option><option>NOCHE</option></select>
+                    <select id="input-turno"><option></option><option>MAÑANA</option><option>TARDE</option><option>NOCHE</option></select>
                 </div>
             </td>
         </tr>
@@ -132,31 +141,7 @@
             <td class="label-text">ULTIMO BUZON</td>
             <td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
         </tr>
-
-        <tr>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
-        </tr>
-        <tr>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
-        </tr>
-        <tr>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
-        </tr>
-        <tr>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
-            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
-        </tr>
+        
         <tr>
             <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
             <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
@@ -173,89 +158,92 @@
             <td><div class="flex-row"><span class="currency">$</span><input type="text" id="total-rendido" class="readonly-calc" readonly></div></td>
         </tr>
         <tr>
-            <td class="header-bg" style="color: red;">DIFERENCIA</td>
-            <td><div class="flex-row"><span class="currency" style="color:red;">$</span><input type="text" id="diferencia" class="readonly-calc" readonly style="color:red;"></div></td>
+            <td class="header-bg" id="label-diferencia">DIFERENCIA</td>
+            <td><div class="flex-row"><span class="currency" id="curr-diferencia">$</span><input type="text" id="diferencia" class="readonly-calc" readonly></div></td>
         </tr>
     </table>
 </div>
 
+<div class="panel-control">
+    <button class="btn btn-cargar" onclick="cargarPlanilla()">📥 Buscar y Cargar Datos</button>
+    <span id="status-msg">Selecciona Fecha y Turno arriba para operar</span>
+    <button class="btn btn-guardar" onclick="guardarPlanilla()">💾 Guardar Planilla</button>
+</div>
+
 <script>
+    // ----------------------------------------------------
+    // ⚠️ PEGA AQUÍ TU URL DE GOOGLE APPS SCRIPT
+    // ----------------------------------------------------
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzRPLgBjVLjUlVD4RdsZiEkoQkdWsQi3KhXQ3z9Ayw555i-xN2nvOyljqoLZ6-IebiYSQ/exec';
+
     const planilla = document.getElementById('planilla');
 
-    // Función súper resistente para leer números (entiende comas, puntos, espacios)
+    function esCampoNumerico(el) {
+        return el.classList.contains('sum-buzon') || el.classList.contains('sum-ctacte') || el.classList.contains('sum-lubri') || el.classList.contains('sum-rend-manual') || el.id === 'venta-combustible';
+    }
+
     function parseCurrency(val) {
         if (!val) return 0;
         let str = val.toString().trim();
-        
-        // Si el usuario usa el punto del teclado numérico en vez de coma
-        if (!str.includes(',') && str.includes('.')) {
-             str = str.replace(/[^0-9.-]/g, ''); 
-        } else {
-             // Formato normal con coma: borramos puntos de miles y dejamos la coma
-             str = str.replace(/[^0-9,-]/g, '').replace(',', '.');
-        }
-        
+        if (str.includes(',')) str = str.replace(/\./g, '').replace(',', '.');
+        str = str.replace(/[^0-9.-]/g, '');
         let num = parseFloat(str);
         return isNaN(num) ? 0 : num;
     }
 
-    // Función para mostrar el número con el formato argentino (1.000.000,00)
     function formatOutput(num) {
+        if (num === 0) return ''; 
         return new Intl.NumberFormat('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
     }
 
+    planilla.addEventListener('focusin', function(e) {
+        if (e.target.tagName === 'INPUT' && !e.target.readOnly && esCampoNumerico(e.target)) {
+            let val = parseCurrency(e.target.value);
+            e.target.value = val === 0 ? '' : val; 
+        }
+    });
+
+    planilla.addEventListener('focusout', function(e) {
+        if (e.target.tagName === 'INPUT' && !e.target.readOnly && esCampoNumerico(e.target)) {
+            let val = parseCurrency(e.target.value);
+            e.target.value = formatOutput(val);
+        }
+    });
+
     function calcular() {
-        let sumBuzones = 0;
+        let sumBuzones = 0, sumLubri = 0, sumCtaCte = 0, sumManuales = 0;
         document.querySelectorAll('.sum-buzon').forEach(i => sumBuzones += parseCurrency(i.value));
-        document.getElementById('out-buzones-rend').value = formatOutput(sumBuzones);
-
-        let sumLubri = 0;
         document.querySelectorAll('.sum-lubri').forEach(i => sumLubri += parseCurrency(i.value));
-        document.getElementById('out-lubricantes-rend').value = formatOutput(sumLubri);
-
-        let sumCtaCte = 0;
         document.querySelectorAll('.sum-ctacte').forEach(i => sumCtaCte += parseCurrency(i.value));
+        document.querySelectorAll('.sum-rend-manual').forEach(i => sumManuales += parseCurrency(i.value));
+
+        document.getElementById('out-buzones-rend').value = formatOutput(sumBuzones);
+        document.getElementById('out-lubricantes-rend').value = formatOutput(sumLubri);
         document.getElementById('out-ctacte-rend').value = formatOutput(sumCtaCte);
 
-        // TOTAL 1
         let vtaComb = parseCurrency(document.getElementById('venta-combustible').value);
         let tEsperado = vtaComb + sumLubri;
         document.getElementById('total-esperado').value = formatOutput(tEsperado);
 
-        // TOTAL 2
-        let sumManuales = 0;
-        document.querySelectorAll('.sum-rend-manual').forEach(i => sumManuales += parseCurrency(i.value));
         let tRendido = sumBuzones + sumCtaCte + sumManuales;
         document.getElementById('total-rendido').value = formatOutput(tRendido);
 
-        // Diferencia
-        document.getElementById('diferencia').value = formatOutput(tRendido - tEsperado);
+        let dif = tRendido - tEsperado;
+        let diffInput = document.getElementById('diferencia');
+        let diffLabel = document.getElementById('label-diferencia');
+        let diffCurr = document.getElementById('curr-diferencia');
+        
+        diffInput.value = formatOutput(dif);
+
+        if (dif < 0) { diffInput.style.color = '#d32f2f'; diffLabel.style.color = '#d32f2f'; diffCurr.style.color  = '#d32f2f'; }
+        else if (dif > 0) { diffInput.style.color = '#2e7d32'; diffLabel.style.color = '#2e7d32'; diffCurr.style.color  = '#2e7d32'; } 
+        else { diffInput.style.color = '#000'; diffLabel.style.color = '#000'; diffCurr.style.color  = '#555'; }
     }
 
-    // Calcular mientras se escribe
     planilla.addEventListener('input', calcular);
 
-    // Formatear la celda cuando el usuario termina de escribir y pasa a otra (focusout)
-    planilla.addEventListener('focusout', function(e) {
-        if (e.target.tagName === 'INPUT' && !e.target.readOnly && 
-            (e.target.classList.contains('sum-buzon') || 
-             e.target.classList.contains('sum-ctacte') || 
-             e.target.classList.contains('sum-lubri') || 
-             e.target.classList.contains('sum-rend-manual') || 
-             e.target.id === 'venta-combustible')) {
-            
-            let val = parseCurrency(e.target.value);
-            e.target.value = val === 0 ? '' : formatOutput(val);
-        }
-    });
-
-    // --- Sistema de Observaciones con Puntos ---
     const textarea = document.getElementById('obs');
-    
-    textarea.addEventListener('focus', function() {
-        if (this.value === '') this.value = '• ';
-    });
-
+    textarea.addEventListener('focus', function() { if (this.value.trim() === '') this.value = '• '; });
     textarea.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -265,8 +253,86 @@
         }
     });
 
-    // Calcular al cargar la página por primera vez
     calcular();
+
+    // ==========================================
+    // LÓGICA DE GUARDADO Y CARGA (WEB)
+    // ==========================================
+
+    function msg(texto, color) {
+        const el = document.getElementById('status-msg');
+        el.textContent = texto;
+        el.style.color = color;
+    }
+
+    function getValoresCeldas() {
+        // Obtenemos TODOS los campos editables
+        const inputs = document.querySelectorAll('input:not([readonly]), select, textarea');
+        return Array.from(inputs).map(el => el.value);
+    }
+
+    function setValoresCeldas(dataArray) {
+        const inputs = document.querySelectorAll('input:not([readonly]), select, textarea');
+        inputs.forEach((el, index) => {
+            if (dataArray[index] !== undefined) el.value = dataArray[index];
+        });
+        calcular(); // Recalculamos totales al cargar
+    }
+
+    function guardarPlanilla() {
+        const fecha = document.getElementById('input-fecha').value;
+        const turno = document.getElementById('input-turno').value;
+
+        if (!fecha || !turno) {
+            msg('⚠️ Falta ingresar Fecha y Turno', 'red');
+            return;
+        }
+
+        msg('⏳ Guardando...', 'blue');
+        
+        const payload = {
+            fecha: fecha,
+            turno: turno,
+            datos: getValoresCeldas()
+        };
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' } // text/plain evita errores CORS en Apps Script
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === 'ok') msg('✅ Planilla guardada exitosamente', 'green');
+            else msg('❌ Error al guardar', 'red');
+        })
+        .catch(error => msg('❌ Error de conexión', 'red'));
+    }
+
+    function cargarPlanilla() {
+        const fecha = document.getElementById('input-fecha').value;
+        const turno = document.getElementById('input-turno').value;
+
+        if (!fecha || !turno) {
+            msg('⚠️ Pon Fecha y Turno para buscar', 'red');
+            return;
+        }
+
+        msg('⏳ Buscando datos...', 'blue');
+
+        fetch(`${SCRIPT_URL}?fecha=${fecha}&turno=${turno}`)
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === 'ok') {
+                setValoresCeldas(data.datos);
+                msg('✅ Datos cargados', 'green');
+            } else {
+                msg('ℹ️ No hay datos para esa Fecha/Turno', 'orange');
+            }
+        })
+        .catch(error => msg('❌ Error de conexión', 'red'));
+    }
+
 </script>
 
 </body>
