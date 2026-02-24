@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Planilla YPF - Automatizada</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #444; margin: 20px; display: flex; justify-content: center; }
+        .hoja { width: 1050px; background: white; padding: 20px; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        td { border: 1px solid #000; height: 26px; font-size: 11px; vertical-align: middle; padding: 0; }
+        .flex-row { display: flex; align-items: center; width: 100%; height: 100%; }
+        .label-text { padding: 0 5px; font-weight: bold; white-space: nowrap; font-size: 10px; }
+        .currency { padding-left: 5px; font-weight: bold; color: #555; }
+        input, select, textarea { border: none; outline: none; font-size: 11px; width: 100%; height: 100%; background: transparent; padding: 0 5px; box-sizing: border-box; }
+        .header-bg { background-color: #f2f2f2; text-align: center; font-weight: bold; text-transform: uppercase; }
+        .readonly-calc { background-color: #fdfdfd; font-weight: bold; color: #000; }
+        .sub-header { text-align: center; font-weight: bold; font-size: 9px; background: #fafafa; }
+        /* Columnas */
+        .c-nombre { width: 16.5%; } .c-importe { width: 8.5%; } .c-rend-label { width: 15%; } .c-rend-monto { width: 10%; }
+    </style>
+</head>
+<body>
+
+<div class="hoja">
+    <table id="planilla">
+        <colgroup>
+            <col class="c-nombre"><col class="c-importe">
+            <col class="c-nombre"><col class="c-importe">
+            <col class="c-nombre"><col class="c-importe">
+            <col class="c-rend-label"><col class="c-rend-monto">
+        </colgroup>
+
+        <tr>
+            <td colspan="6" class="header-bg" style="font-size: 14px;">PLANILLA DE CONTROL DE TURNO PLAYA YPF</td>
+            <td colspan="2">
+                <div class="flex-row"><span class="label-text">PLANILLA N°</span><input type="text"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><div class="flex-row"><span class="label-text">Resp. Playa:</span><input type="text"></div></td>
+            <td colspan="2"><div class="flex-row"><span class="label-text">Operarios:</span><input type="text"></div></td>
+            <td colspan="2"><div class="flex-row"><span class="label-text">Fecha:</span><input type="date"></div></td>
+            <td colspan="2">
+                <div class="flex-row"><span class="label-text">TURNO:</span>
+                    <select><option></option><option>MAÑANA</option><option>TARDE</option><option>NOCHE</option></select>
+                </div>
+            </td>
+        </tr>
+
+        <tr><td colspan="6" class="header-bg">BUZONES</td><td colspan="2" class="header-bg">RENDICION</td></tr>
+        <tr>
+            <td><input type="text" inputmode="decimal" class="sum-buzon"></td><td><input type="text" inputmode="decimal" class="sum-buzon"></td>
+            <td><input type="text" inputmode="decimal" class="sum-buzon"></td><td><input type="text" inputmode="decimal" class="sum-buzon"></td>
+            <td><input type="text" inputmode="decimal" class="sum-buzon"></td><td><input type="text" inputmode="decimal" class="sum-buzon"></td>
+            <td class="label-text">TOTAL COMB (VENTA)</td>
+            <td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" id="venta-combustible" class="val-cambio"></div></td>
+        </tr>
+        <tr>
+            <td><input type="text" inputmode="decimal" class="sum-buzon"></td><td><input type="text" inputmode="decimal" class="sum-buzon"></td>
+            <td><input type="text" inputmode="decimal" class="sum-buzon"></td><td><input type="text" inputmode="decimal" class="sum-buzon"></td>
+            <td><input type="text" inputmode="decimal" class="sum-buzon"></td><td><input type="text" inputmode="decimal" class="sum-buzon"></td>
+            <td class="label-text">T. LUBRICANTES (VENTA)</td>
+            <td><div class="flex-row"><span class="currency">$</span><input type="text" id="out-lubricantes-rend" class="readonly-calc" readonly></div></td>
+        </tr>
+
+        <tr>
+            <td colspan="4" class="header-bg">DETALLE CUENTAS CORRIENTES Y YER</td>
+            <td colspan="2" class="header-bg">VENTA DE LUBRICANTES</td>
+            <td class="header-bg">TOTAL 1 (ESPERADO)</td>
+            <td><div class="flex-row"><span class="currency">$</span><input type="text" id="total-esperado" class="readonly-calc" readonly></div></td>
+        </tr>
+        <tr>
+            <td class="sub-header">NOMBRE</td><td class="sub-header">IMPORTE</td>
+            <td class="sub-header">NOMBRE</td><td class="sub-header">IMPORTE</td>
+            <td class="sub-header">NOMBRE</td><td class="sub-header">IMPORTE</td>
+            <td class="sub-header">CONCEPTO</td><td class="sub-header">IMPORTE RENDIDO</td>
+        </tr>
+
+        <tr>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
+            <td class="label-text">BUZONES (RECAUDADO)</td>
+            <td><div class="flex-row"><span class="currency">$</span><input type="text" id="out-buzones-rend" class="readonly-calc" readonly></div></td>
+        </tr>
+        <tr>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
+            <td class="label-text">CTA. CTE</td>
+            <td><div class="flex-row"><span class="currency">$</span><input type="text" id="out-ctacte-rend" class="readonly-calc" readonly></div></td>
+        </tr>
+        <tr>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
+            <td class="label-text">TARJETAS</td>
+            <td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
+        </tr>
+        <tr>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
+            <td class="label-text">MERCADO PAGO</td>
+            <td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
+        </tr>
+        <tr>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
+            <td class="label-text">APP YPF</td>
+            <td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
+        </tr>
+        <tr>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
+            <td class="label-text">DESC. APP YPF</td>
+            <td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
+        </tr>
+        <tr>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
+            <td class="label-text">PAGOS GASTOS</td>
+            <td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
+        </tr>
+        <tr>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
+            <td class="label-text">ULTIMO BUZON</td>
+            <td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
+        </tr>
+
+        <tr>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
+        </tr>
+        <tr>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
+        </tr>
+        <tr>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
+        </tr>
+        <tr>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
+        </tr>
+        <tr>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-ctacte"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-lubri"></div></td>
+            <td><input type="text"></td><td><div class="flex-row"><span class="currency">$</span><input type="text" inputmode="decimal" class="sum-rend-manual"></div></td>
+        </tr>
+
+        <tr>
+            <td colspan="6" rowspan="2" style="padding: 5px; vertical-align: top;">
+                <span class="label-text">FIRMA / OBSERVACIONES</span>
+                <textarea id="obs" placeholder="Escribe aquí..."></textarea>
+            </td>
+            <td class="header-bg">TOTAL 2 (RENDIDO)</td>
+            <td><div class="flex-row"><span class="currency">$</span><input type="text" id="total-rendido" class="readonly-calc" readonly></div></td>
+        </tr>
+        <tr>
+            <td class="header-bg" style="color: red;">DIFERENCIA</td>
+            <td><div class="flex-row"><span class="currency" style="color:red;">$</span><input type="text" id="diferencia" class="readonly-calc" readonly style="color:red;"></div></td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    const planilla = document.getElementById('planilla');
+
+    // Función súper resistente para leer números (entiende comas, puntos, espacios)
+    function parseCurrency(val) {
+        if (!val) return 0;
+        let str = val.toString().trim();
+        
+        // Si el usuario usa el punto del teclado numérico en vez de coma
+        if (!str.includes(',') && str.includes('.')) {
+             str = str.replace(/[^0-9.-]/g, ''); 
+        } else {
+             // Formato normal con coma: borramos puntos de miles y dejamos la coma
+             str = str.replace(/[^0-9,-]/g, '').replace(',', '.');
+        }
+        
+        let num = parseFloat(str);
+        return isNaN(num) ? 0 : num;
+    }
+
+    // Función para mostrar el número con el formato argentino (1.000.000,00)
+    function formatOutput(num) {
+        return new Intl.NumberFormat('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
+    }
+
+    function calcular() {
+        let sumBuzones = 0;
+        document.querySelectorAll('.sum-buzon').forEach(i => sumBuzones += parseCurrency(i.value));
+        document.getElementById('out-buzones-rend').value = formatOutput(sumBuzones);
+
+        let sumLubri = 0;
+        document.querySelectorAll('.sum-lubri').forEach(i => sumLubri += parseCurrency(i.value));
+        document.getElementById('out-lubricantes-rend').value = formatOutput(sumLubri);
+
+        let sumCtaCte = 0;
+        document.querySelectorAll('.sum-ctacte').forEach(i => sumCtaCte += parseCurrency(i.value));
+        document.getElementById('out-ctacte-rend').value = formatOutput(sumCtaCte);
+
+        // TOTAL 1
+        let vtaComb = parseCurrency(document.getElementById('venta-combustible').value);
+        let tEsperado = vtaComb + sumLubri;
+        document.getElementById('total-esperado').value = formatOutput(tEsperado);
+
+        // TOTAL 2
+        let sumManuales = 0;
+        document.querySelectorAll('.sum-rend-manual').forEach(i => sumManuales += parseCurrency(i.value));
+        let tRendido = sumBuzones + sumCtaCte + sumManuales;
+        document.getElementById('total-rendido').value = formatOutput(tRendido);
+
+        // Diferencia
+        document.getElementById('diferencia').value = formatOutput(tRendido - tEsperado);
+    }
+
+    // Calcular mientras se escribe
+    planilla.addEventListener('input', calcular);
+
+    // Formatear la celda cuando el usuario termina de escribir y pasa a otra (focusout)
+    planilla.addEventListener('focusout', function(e) {
+        if (e.target.tagName === 'INPUT' && !e.target.readOnly && 
+            (e.target.classList.contains('sum-buzon') || 
+             e.target.classList.contains('sum-ctacte') || 
+             e.target.classList.contains('sum-lubri') || 
+             e.target.classList.contains('sum-rend-manual') || 
+             e.target.id === 'venta-combustible')) {
+            
+            let val = parseCurrency(e.target.value);
+            e.target.value = val === 0 ? '' : formatOutput(val);
+        }
+    });
+
+    // --- Sistema de Observaciones con Puntos ---
+    const textarea = document.getElementById('obs');
+    
+    textarea.addEventListener('focus', function() {
+        if (this.value === '') this.value = '• ';
+    });
+
+    textarea.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const start = this.selectionStart;
+            this.value = this.value.substring(0, start) + '\n• ' + this.value.substring(this.selectionEnd);
+            this.selectionStart = this.selectionEnd = start + 3;
+        }
+    });
+
+    // Calcular al cargar la página por primera vez
+    calcular();
+</script>
+
+</body>
+</html>
